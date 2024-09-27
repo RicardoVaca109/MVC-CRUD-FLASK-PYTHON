@@ -20,7 +20,7 @@ class Usuario:
         cursor.close()
 
     @staticmethod
-    def eliminar_usuario():
+    def eliminar_usuario(id):
         cursor = conexion_database.cursor()
         sql_query_eliminar = "DELETE FROM usuarios WHERE id = %s"
         data = (id,)
@@ -28,10 +28,10 @@ class Usuario:
         conexion_database.commit()
         cursor.close()
     @staticmethod
-    def actualizar_usuario(id,nombre, appelido,correo):
+    def actualizar_usuario(id,nombre, apellido,correo):
         cursor = conexion_database.cursor()
         sql_query_editar = "UPDATE usuarios SET nombre_usuario = %s, apellido_usuario = %s, correo = %s WHERE id = %s"
-        data_actualizada = (nombre, appelido, correo, id)
+        data_actualizada = (nombre, apellido, correo, id)
         cursor.execute(sql_query_editar, data_actualizada)
         conexion_database.commit()
         cursor.close()
