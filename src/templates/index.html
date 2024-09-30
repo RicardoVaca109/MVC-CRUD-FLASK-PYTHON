@@ -6,13 +6,31 @@
     <title>CRUD Example</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            background-color: #afe2fc; /* Gris suave */
+        }
+        .btn-color-visualizar {
+            background-color: #0055fe; /* Color azul personalizado */
+            color: rgb(255, 255, 255);
+        }
+        .btn-color-editar{
+            background-color: #ffff00; /* Color azul personalizado */
+            color: rgb(0, 0, 0);
+        }
+        .btn-color-eliminar{
+            background-color: #e50000d5; /* Color azul personalizado */
+            color: rgb(0, 0, 0);
+        }
+    </style>
 </head>
 <body>
     
-    <h1 class="text-center mt-5 mb-5 text-primary">CRUD-MVC-Python-Flask-MySQL</h1>
+    <h1 class="text-center mt-5 mb-5 fs-2 fw-bold">CRUD-MVC-Python-Flask-MySQL</h1>
     <div class="container">
-        <div class="card shadow">
-            <div class="card-body">
+        <div class="card  shadow">
+            <div class="card-body ">
                 <form action="/usuarios" method="POST">
                     <div class="row mb-3">
                         <div class="col-md-3">
@@ -33,7 +51,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col">
+                        <div class="col d-grid gap-2 col-6 mx-auto">
                             <button class="btn btn-primary" type="submit">Guardar</button>
                         </div>
                     </div>
@@ -41,19 +59,17 @@
 
                 <!-- Tabla -->
     
-
-                <table class="table table-bordered">
-
-                    <thead>
+                <table class="table table-bordered table-striped text-secondary bg-dark">
+                    <thead class="table-dark">
                         <th scope="col">#</th>
                         <th scope="col">Nombre de Usuario</th>
                         <th scope="col">Apellido de Usuario</th>
                         <th scope="col">Correo</th>
+                        <th scope="col">Vizualizar</th>
                         <th scope="col">Editar</th>
                         <th scope="col">Borrar</th>
                     </thead>
 
-                
                     <tbody>
                         {% for d in datos %}
                             <tr>
@@ -61,35 +77,55 @@
                                 <td> {{d.nombre_usuario}}</td>
                                 <td> {{d.apellido_usuario}} </td>
                                 <td> {{d.correo}} </td>
-                                <td> <button class="btn btn-primary btn-sm" id="btn-edit{{d.id}}" data-bs-toggle="modal" data-bs-target="#modal{{d.id}}">Editar</button></td>
-                                <td><a href=" {{url_for('usuario_bp.eliminarUsuario', id=d.id)}} " class="btn btn-danger btn-sm">Eliminar</a></td>
+                                <td><button class="btn btn-color-visualizar btn-sm bi bi-eye" data-bs-toggle="modal" data-bs-target="#modal{{d.nombre_usuario}}"> Visualizar</button></td>
+                                <td> <button class="btn btn-color-editar btn-sm bi bi-pencil" id="btn-edit{{d.id}}" data-bs-toggle="modal" data-bs-target="#modal{{d.id}}"> Editar</button></td>
+                                <td><a href=" {{url_for('usuario_bp.eliminarUsuario', id=d.id)}} " class="btn btn-color-eliminar btn-sm bi bi-trash"> Eliminar</a></td>
                             </tr>
 
-                            <!--MODAL -->
+                            <!--MODAL Para Editar Datos -->
 
                             <div class="modal fade" id="modal{{d.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel"> {{d.nombre_usuario}} </h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">Cerrar</button>
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel"> {{d.nombre_usuario}} </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/edit/{{d.id}}" method="post">
+                                                <label>Nombre de Usuario: {{d.nombre_usuario}}</label>
+                                                <input type="text" class="form-control mb-3" name="nombre_usuario" value="{{d.nombre_usuario}}">
+                                                <label>Apellido de Usuario</label>
+                                                <input type="text" class="form-control mb-3" name="apellido_usuario" value="{{d.apellido_usuario}}">
+                                                <label>Correo</label>
+                                                <input type="email" class="form-control mb-3" name="correo" value="{{d.correo}}">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                        </div>
+                                        </form>
                                     </div>
-                                    <div class="modal-body">
-                                        <form action="/edit/{{d.id}}" method="post">
-                                            <label>Nombre de Usuario</label>
-                                            <input type="text" class="form-control mb-3" name="nombre_usuario" value="{{d.nombre_usuario}}">
-                                            <label>Apellido de Usuario</label>
-                                            <input type="text" class="form-control mb-3" name="apellido_usuario" value="{{d.apellido_usuario}}">
-                                            <label>Correo</label>
-                                            <input type="email" class="form-control mb-3" name="correo" value="{{d.correo}}">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                                    </div>
-                                    </form>
-                                </div>
                                 </div>
                             </div>
+                            <!--Modal Visualizar Datos-->
+                            <div class="modal fade" id="modal{{d.nombre_usuario}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel"> Visualizar datos: {{d.nombre_usuario}} </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post">
+                                                <label>Nombre de Usuario: {{d.nombre_usuario}}</label><br>
+                                                <label>Apellido de Usuario: {{d.apellido_usuario}}</label><br>
+                                                <label>Correo: {{d.correo}}</label><br>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         {% endfor %}
                     </tbody>
                 </table>
