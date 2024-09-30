@@ -1,4 +1,3 @@
-# app.py (si decides no usar __init__.py)
 from flask import Flask
 # from src.controllers.usuario_controller import usuario_bp
 from controllers.usuario_controller import usuario_bp
